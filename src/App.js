@@ -12,6 +12,7 @@ import SplashScreen from "./Screens/SplashScreen";
 import Home from "./Screens/Home";
 import { setUser } from "./Actions/AuthActions";
 import Notfound from "./Screens/404";
+import ForgotPassword from "./Screens/ForgotPassword";
 
 export default class App extends Component {
   state = {
@@ -44,6 +45,7 @@ export default class App extends Component {
               <Route exact path="/" component={Home} />
             )}
             <Route exact path="/home" component={Home} />
+            <Route exact path="/forgot" component={ForgotPassword} />
             <Route exact component={Notfound} />
           </Switch>
         </Router>

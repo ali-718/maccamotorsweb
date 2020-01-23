@@ -19,6 +19,20 @@ export const Login = (Email, Passsword, history) => dispatch => {
     });
 };
 
+export const ForgotPassword = Email => dispatch => {
+  dispatch(Loading());
+  axios
+    .post(`${url}/ForgetPwd?EmailAddr=${Email}`)
+    .then(res => {
+      dispatch({ type: "FORGOT_PASSWORD" });
+      dispatch(CloseLoading());
+    })
+    .catch(e => {
+      dispatch({ type: "FORGOT_PASSWORD_ERROR" });
+      dispatch(CloseLoading());
+    });
+};
+
 export const setUser = data => dispatch => {
   dispatch({ type: LOGIN, payload: data });
 };

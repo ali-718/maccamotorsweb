@@ -2,7 +2,9 @@ import { LOGIN } from "../Actions/types";
 let initialState = {
   authErrorModal: false,
   Loading: false,
-  isLogin: false
+  isLogin: false,
+  isForgotSuccess: false,
+  forgotPasswordError: false
 };
 
 export default (state = initialState, action) => {
@@ -15,6 +17,19 @@ export default (state = initialState, action) => {
       return { ...state, Loading: true };
     case "CLOSE_LOADING":
       return { ...state, Loading: false };
+    case "FORGOT_PASSWORD":
+      return {
+        ...state,
+        Loading: false,
+        isForgotSuccess: true,
+        authErrorModal: false
+      };
+    case "FORGOT_PASSWORD_ERROR":
+      return {
+        ...state,
+        Loading: false,
+        forgotPasswordError: true
+      };
     default:
       return state;
   }
