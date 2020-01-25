@@ -13,6 +13,8 @@ import Home from "./Screens/Home";
 import { setUser } from "./Actions/AuthActions";
 import Notfound from "./Screens/404";
 import ForgotPassword from "./Screens/ForgotPassword";
+import DatePickerPage from "./Screens/Test";
+import Dashboard from "./Screens/Dashboard";
 
 export default class App extends Component {
   state = {
@@ -42,10 +44,12 @@ export default class App extends Component {
             ) : !this.state.isLogin ? (
               <Route exact path="/" component={SignIn} />
             ) : (
-              <Route exact path="/" component={Home} />
+              <Route exact path="/" component={Dashboard} />
             )}
             <Route exact path="/home" component={Home} />
             <Route exact path="/forgot" component={ForgotPassword} />
+            <Route exact path="/test" component={DatePickerPage} />
+            <Route exact path="/dashboard" component={Dashboard} />
             <Route exact component={Notfound} />
           </Switch>
         </Router>
