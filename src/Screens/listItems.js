@@ -9,21 +9,37 @@ import PeopleIcon from "@material-ui/icons/People";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import LayersIcon from "@material-ui/icons/Layers";
 import AssignmentIcon from "@material-ui/icons/Assignment";
+import Home from "./Home";
+import { Link } from "react-router-dom";
 
 export const mainListItems = (
   <div>
-    <ListItem button>
-      <ListItemIcon>
-        <DashboardIcon />
-      </ListItemIcon>
-      <ListItemText primary="Manage Offer" />
-    </ListItem>
-    <ListItem button>
-      <ListItemIcon>
-        <ShoppingCartIcon />
-      </ListItemIcon>
-      <ListItemText primary="Orders" />
-    </ListItem>
+    <Link
+      style={{ textDecoration: "none", color: "black" }}
+      // onClick={() => console.log("hello")}
+      to="/home"
+    >
+      <ListItem button>
+        <ListItemIcon>
+          <DashboardIcon />
+        </ListItemIcon>
+        <ListItemText primary="Manage Offer" />
+      </ListItem>
+    </Link>
+
+    <Link
+      style={{ textDecoration: "none", color: "black" }}
+      // onClick={() => console.log("hello")}
+      to="/offers"
+    >
+      <ListItem button>
+        <ListItemIcon>
+          <ShoppingCartIcon />
+        </ListItemIcon>
+        <ListItemText primary="Offer List" />
+      </ListItem>
+    </Link>
+
     <ListItem button>
       <ListItemIcon>
         <PeopleIcon />

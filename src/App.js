@@ -15,6 +15,7 @@ import Notfound from "./Screens/404";
 import ForgotPassword from "./Screens/ForgotPassword";
 import DatePickerPage from "./Screens/Test";
 import Dashboard from "./Screens/Dashboard";
+import OfferList from "./Screens/OfferList";
 
 export default class App extends Component {
   state = {
@@ -46,10 +47,11 @@ export default class App extends Component {
             ) : (
               <Route exact path="/" component={Dashboard} />
             )}
-            <Route exact path="/home" component={Home} />
+            <Route exact path="/home" component={Dashboard} />
             <Route exact path="/forgot" component={ForgotPassword} />
-            <Route exact path="/test" component={DatePickerPage} />
+            {/* <Route exact path="/test" component={DatePickerPage} /> */}
             <Route exact path="/dashboard" component={Dashboard} />
+            <Route exact path="/offers" component={OfferList} />
             <Route exact component={Notfound} />
           </Switch>
         </Router>
