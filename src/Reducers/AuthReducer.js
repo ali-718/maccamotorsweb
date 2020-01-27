@@ -4,7 +4,8 @@ let initialState = {
   Loading: false,
   isLogin: false,
   isForgotSuccess: false,
-  forgotPasswordError: false
+  forgotPasswordError: false,
+  currentUser: {}
 };
 
 export default (state = initialState, action) => {
@@ -15,6 +16,8 @@ export default (state = initialState, action) => {
       return { ...state, authErrorModal: true, Loading: false };
     case "LOADING":
       return { ...state, Loading: true };
+    case "LOGOUT":
+      return { ...state, currentUser: {}, isLogin: false };
     case "CLOSE_LOADING":
       return { ...state, Loading: false };
     case "FORGOT_PASSWORD":

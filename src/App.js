@@ -27,6 +27,7 @@ export default class App extends Component {
     const user = localStorage.getItem("currentUser");
 
     if (user) {
+      console.log("chaning ecverytime");
       store.dispatch(setUser(JSON.parse(user)));
       setTimeout(() => {
         this.setState({ isLogin: true });

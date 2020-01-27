@@ -19,6 +19,12 @@ export const Login = (Email, Passsword, history) => dispatch => {
     });
 };
 
+export const Logout = history => dispatch => {
+  localStorage.removeItem("currentUser");
+  dispatch({ type: "LOGOUT" });
+  history.push("/");
+};
+
 export const ForgotPassword = Email => dispatch => {
   dispatch(Loading());
   axios

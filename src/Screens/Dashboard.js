@@ -18,9 +18,10 @@ import Link from "@material-ui/core/Link";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import NotificationsIcon from "@material-ui/icons/Notifications";
-import { mainListItems, secondaryListItems } from "./listItems";
+import { mainListItems, SecondaryListItems } from "./listItems";
 import Home from "./Home";
 import { connect } from "react-redux";
+import { Logout } from "../Actions/AuthActions";
 
 function Copyright() {
   return (
@@ -145,6 +146,7 @@ function Dashboard(props) {
           >
             <MenuIcon />
           </IconButton>
+
           <Typography
             component="h1"
             variant="h6"
@@ -168,10 +170,18 @@ function Dashboard(props) {
             <ChevronLeftIcon />
           </IconButton>
         </div>
+        <center>
+          <p>
+            Hello{" "}
+            <span style={{ fontWeight: "bold" }}>
+              {props.auth.currentUser.CusNm || ""}
+            </span>
+          </p>
+        </center>
         <Divider />
         <List>{mainListItems}</List>
         <Divider />
-        <List>{secondaryListItems}</List>
+        <SecondaryListItems logout={() => props.Logout(props.history)} />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />
@@ -190,4 +200,4 @@ const mapStateToProps = state => ({
   auth: state.auth
 });
 
-export default connect(mapStateToProps)(Dashboard);
+export default connect(mapStateToProps, { Logout })(Dashboard);

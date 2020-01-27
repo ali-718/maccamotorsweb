@@ -33,7 +33,9 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -52,6 +54,11 @@ const useStyles = makeStyles(theme => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2)
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   }
 }));
 
@@ -64,11 +71,11 @@ function Offers(props) {
   const [emptyError, setEmptyError] = useState(false);
   const [axiosError, setAxiosError] = useState(false);
   const [data, setData] = useState([]);
+  const [open, setOpen] = React.useState(false);
+  const [currentOffer, setCurrentOffer] = React.useState({});
 
   const Search = validOffer => {
-    if (startDate == "" || endDate == "") {
-      setEmptyError(true);
-    } else {
+    if (validOffer == "Y") {
       setEmptyError(false);
       axios
         .get(
@@ -84,6 +91,26 @@ function Offers(props) {
         .catch(e => {
           setAxiosError(true);
         });
+    } else {
+      if (startDate == "" || endDate == "") {
+        setEmptyError(true);
+      } else {
+        setEmptyError(false);
+        axios
+          .get(
+            `${url}/GetOfferList?ShowValidOffer=${validOffer}&StartDate=${
+              validOffer == "Y" ? "-" : moment(startDate).format("DD-MMM-YYYY")
+            }&EndDate=${
+              validOffer == "Y" ? "-" : moment(endDate).format("DD-MMM-YYYY")
+            }`
+          )
+          .then(res => {
+            setData(res.data);
+          })
+          .catch(e => {
+            setAxiosError(true);
+          });
+      }
     }
   };
 
@@ -92,6 +119,14 @@ function Offers(props) {
       props.history.push("/");
     }
   });
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <Container component="main" maxWidth="lg">
@@ -203,31 +238,17 @@ function Offers(props) {
           <TableBody>
             {data.map(row => (
               <TableRow key={row.PromId}>
-                <TableCell padding="none" align="center">
-                  {row.PromId}
-                </TableCell>
-                <TableCell padding="none" align="center">
-                  {row.Rmk}
-                </TableCell>
-                <TableCell padding="none" align="center">
-                  {row.Dsc}
-                </TableCell>
-                <TableCell padding="none" align="center">
-                  {row.DscLst}
-                </TableCell>
-                <TableCell padding="none" align="center">
-                  {row.OfferDsc}
-                </TableCell>
-                <TableCell padding="none" align="center">
-                  {row.OfferDscLst}
-                </TableCell>
-                <TableCell padding="none" align="center">
+                <TableCell align="center">{row.PromId}</TableCell>
+                <TableCell align="center">{row.Rmk}</TableCell>
+                <TableCell align="center">{row.Dsc}</TableCell>
+                <TableCell align="center">{row.DscLst}</TableCell>
+                <TableCell align="center">{row.OfferDsc}</TableCell>
+                <TableCell align="center">{row.OfferDscLst}</TableCell>
+                <TableCell align="center">
                   {row.StrtDate.slice(0, 10)}
                 </TableCell>
-                <TableCell padding="none" align="center">
-                  {row.EndDate.slice(0, 10)}
-                </TableCell>
-                <TableCell padding="none" align="center">
+                <TableCell align="center">{row.EndDate.slice(0, 10)}</TableCell>
+                <TableCell align="center">
                   <img src={row.ImgURL} style={{ width: 100, height: 100 }} />
                 </TableCell>
                 <TableCell padding="default" align="center">
@@ -239,7 +260,9 @@ function Offers(props) {
                     className={classes.submit}
                     onClick={e => {
                       e.preventDefault();
-                      Search("Y");
+                      setCurrentOffer(row);
+                      setOpen(true);
+                      console.log(row);
                     }}
                     disabled={isLoading}
                   >
@@ -255,7 +278,7 @@ function Offers(props) {
                     className={classes.submit}
                     onClick={e => {
                       e.preventDefault();
-                      Search("Y");
+                      setOpen(true);
                     }}
                     disabled={isLoading}
                   >
@@ -267,6 +290,160 @@ function Offers(props) {
           </TableBody>
         </Table>
       ) : null}
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={open}
+        onClose={handleClose}
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500
+        }}
+        style={{ alignItems: "center", justifyContent: "center" }}
+      >
+        <Fade
+          style={{
+            overflow: "scroll",
+            height: "100%"
+          }}
+          in={open}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              alignSelf: "center",
+              padding: 20,
+              width: "80%"
+            }}
+            className={classes.paper}
+          >
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="notification"
+              label="Notification ID"
+              name="Notification ID"
+              autoFocus
+              disabled={true}
+              value={currentOffer.PromId}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="notification"
+              label="Offer Type"
+              name="Offer Type"
+              autoFocus
+              disabled={true}
+              value={currentOffer.Rmk}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="notification"
+              label="Notification Text"
+              name="Notification Text"
+              autoFocus
+              disabled={true}
+              value={currentOffer.Dsc}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="notification"
+              label="Notification Last Line"
+              name="Notification Last Line"
+              autoFocus
+              disabled={true}
+              value={currentOffer.DscLst}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="notification"
+              label="Full Message"
+              name="Full Message"
+              autoFocus
+              disabled={true}
+              value={currentOffer.OfferDsc}
+            />{" "}
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="notification"
+              label="Full Message Last Line"
+              name="Full Message Last Line"
+              autoFocus
+              disabled={true}
+              value={currentOffer.OfferDscLst}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="notification"
+              label="Start Date"
+              name="Start Date"
+              autoFocus
+              disabled={true}
+              value={currentOffer.StrtDate}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="notification"
+              label="End Date"
+              name="End Date"
+              autoFocus
+              disabled={true}
+              value={currentOffer.EndDate}
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="notification"
+              label="Notification ID"
+              name="Notification ID"
+              autoFocus
+              // disabled={true}
+              value={"end time"}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={e => {
+                e.preventDefault();
+                setOpen(false);
+              }}
+              disabled={isLoading}
+            >
+              {isLoading ? <CircularProgress color="red" /> : "Resend"}
+            </Button>
+          </div>
+        </Fade>
+      </Modal>
     </Container>
   );
 }

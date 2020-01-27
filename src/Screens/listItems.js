@@ -8,7 +8,7 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import PeopleIcon from "@material-ui/icons/People";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import LayersIcon from "@material-ui/icons/Layers";
-import AssignmentIcon from "@material-ui/icons/Assignment";
+import DeleteIcon from "@material-ui/icons/DeleteForever";
 import Home from "./Home";
 import { Link } from "react-router-dom";
 
@@ -61,15 +61,23 @@ export const mainListItems = (
   </div>
 );
 
-export const secondaryListItems = (
+export const SecondaryListItems = props => (
   <div>
-    {/* <ListSubheader inset>Saved reports</ListSubheader>
-    <ListItem button>
-      <ListItemIcon>
-        <AssignmentIcon />
-      </ListItemIcon>
-      <ListItemText primary="Current month" />
-    </ListItem> */}
+    {/* <ListSubheader inset>Saved reports</ListSubheader> */}
+    <center>
+      <Link
+        style={{ textDecoration: "none", color: "white" }}
+        onClick={() => props.logout()}
+      >
+        <ListItem style={{ backgroundColor: "tomato", marginTop: 50 }} button>
+          <ListItemIcon>
+            <DeleteIcon style={{ color: "white" }} />
+          </ListItemIcon>
+          <ListItemText primary="Logout" />
+        </ListItem>
+      </Link>
+    </center>
+
     {/* <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
