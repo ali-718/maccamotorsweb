@@ -72,11 +72,11 @@ function Offers(props) {
       setEmptyError(false);
       axios
         .get(
-          `${url}/GetOfferList?ShowValidOffer=${validOffer}&StartDate=${moment(
-            startDate
-          ).format("DD-MMM-YYYY")}&EndDate=${moment(endDate).format(
-            "DD-MMM-YYYY"
-          )}`
+          `${url}/GetOfferList?ShowValidOffer=${validOffer}&StartDate=${
+            validOffer == "Y" ? "-" : moment(startDate).format("DD-MMM-YYYY")
+          }&EndDate=${
+            validOffer == "Y" ? "-" : moment(endDate).format("DD-MMM-YYYY")
+          }`
         )
         .then(res => {
           setData(res.data);
