@@ -63,15 +63,18 @@ function SignIn(props) {
   useEffect(() => {
     if (props.auth.Loading) {
       setOpen(true);
+      // SetPasswordError(false);
     }
     if (props.auth.forgotPasswordError) {
       SetPasswordError(true);
     }
     if (props.auth.isForgotSuccess) {
       setforgotPasswordSucess(true);
+      SetPasswordError(false);
     }
     if (props.auth.Loading == false) {
       setOpen(false);
+      // SetPasswordError(false);
     }
   }, [props.auth.Loading]);
 
