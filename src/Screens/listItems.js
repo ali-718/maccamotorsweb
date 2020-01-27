@@ -40,7 +40,7 @@ export const mainListItems = (
       </ListItem>
     </Link>
 
-    <ListItem button>
+    {/* <ListItem button>
       <ListItemIcon>
         <PeopleIcon />
       </ListItemIcon>
@@ -57,7 +57,7 @@ export const mainListItems = (
         <LayersIcon />
       </ListItemIcon>
       <ListItemText primary="Integrations" />
-    </ListItem>
+    </ListItem> */}
   </div>
 );
 
@@ -70,7 +70,7 @@ export const secondaryListItems = (
       </ListItemIcon>
       <ListItemText primary="Current month" />
     </ListItem>
-    <ListItem button>
+    {/* <ListItem button>
       <ListItemIcon>
         <AssignmentIcon />
       </ListItemIcon>
@@ -81,6 +81,6 @@ export const secondaryListItems = (
         <AssignmentIcon />
       </ListItemIcon>
       <ListItemText primary="Year-end sale" />
-    </ListItem>
+    </ListItem> */}
   </div>
 );

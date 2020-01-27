@@ -1,28 +1,39 @@
 import React from "react";
-import DatePicker from "react-datepicker";
+import { MDBTable, MDBTableBody, MDBTableHead } from "mdbreact";
 
-import "react-datepicker/dist/react-datepicker.css";
+const BasicTable = () => {
+  return (
+    <MDBTable>
+      <MDBTableHead color="primary-color" textWhite>
+        <tr>
+          <th>#</th>
+          <th>First</th>
+          <th>Last</th>
+          <th>Handle</th>
+        </tr>
+      </MDBTableHead>
+      <MDBTableBody>
+        <tr>
+          <td>1</td>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </MDBTableBody>
+    </MDBTable>
+  );
+};
 
-// CSS Modules, react-datepicker-cssmodules.css
-// import 'react-datepicker/dist/react-datepicker-cssmodules.css';
-
-export default class Example extends React.Component {
-  state = {
-    startDate: new Date()
-  };
-
-  handleChange = date => {
-    this.setState({
-      startDate: date
-    });
-  };
-
-  render() {
-    return (
-      <DatePicker
-        selected={this.state.startDate}
-        onChange={this.handleChange}
-      />
-    );
-  }
-}
+export default BasicTable;

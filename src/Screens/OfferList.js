@@ -27,6 +27,13 @@ import { url } from "../config";
 import moment from "moment";
 import { ImagePicker } from "react-file-picker";
 import { CircularProgress } from "@material-ui/core";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -54,6 +61,31 @@ function Offers(props) {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [emptyError, setEmptyError] = useState(false);
+  const [axiosError, setAxiosError] = useState(false);
+  const [data, setData] = useState([]);
+
+  const Search = validOffer => {
+    if (startDate == "" || endDate == "") {
+      setEmptyError(true);
+    } else {
+      setEmptyError(false);
+      axios
+        .get(
+          `${url}/GetOfferList?ShowValidOffer=${validOffer}&StartDate=${moment(
+            startDate
+          ).format("DD-MMM-YYYY")}&EndDate=${moment(endDate).format(
+            "DD-MMM-YYYY"
+          )}`
+        )
+        .then(res => {
+          setData(res.data);
+        })
+        .catch(e => {
+          setAxiosError(true);
+        });
+    }
+  };
 
   useEffect(() => {
     if (!props.auth.isLogin) {
@@ -62,7 +94,7 @@ function Offers(props) {
   });
 
   return (
-    <Container component="main" maxWidth="md">
+    <Container component="main" maxWidth="lg">
       {/* <CssBaseline /> */}
       <div style={{ marginTop: 0 }} className={classes.paper}>
         <form className={classes.form} noValidate>
@@ -80,6 +112,14 @@ function Offers(props) {
             </Grid>
           </Grid>
 
+          {emptyError ? (
+            <h3 style={{ color: "red" }}>Please fill all fields</h3>
+          ) : axiosError ? (
+            <h3 style={{ color: "red" }}>
+              Some error occoured please try again later
+            </h3>
+          ) : null}
+
           <div>
             <Button
               type="submit"
@@ -87,17 +127,146 @@ function Offers(props) {
               variant="contained"
               color="primary"
               className={classes.submit}
-              //   onClick={e => {
-              //     e.preventDefault();
-              //     Save();
-              //   }}
+              onClick={e => {
+                e.preventDefault();
+                Search("N");
+              }}
               disabled={isLoading}
             >
-              {/* {isLoading ? <CircularProgress color="red" /> : "Save"} */}
+              {isLoading ? <CircularProgress color="red" /> : "Show date wise"}
+            </Button>
+          </div>
+          <div>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={e => {
+                e.preventDefault();
+                Search("Y");
+              }}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <CircularProgress color="red" />
+              ) : (
+                "show valid offer"
+              )}
             </Button>
           </div>
         </form>
+
+        {/* body starts */}
+        {/* body ends */}
       </div>
+      {data.length > 0 ? (
+        <Table
+          className={classes.table}
+          aria-label="a dense table"
+          size="medium"
+        >
+          <TableHead>
+            <TableRow style={{ backgroundColor: "#3F51B5", color: "white" }}>
+              <TableCell style={{ color: "white" }} align="center">
+                Offer Id
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="center">
+                Offer Type
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="center">
+                Notification Text
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="center">
+                Notification Last Line
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="center">
+                Full Message
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="center">
+                Full Message Lastline
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="center">
+                Start Date
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="center">
+                End Date
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="center">
+                Image
+              </TableCell>
+              <TableCell style={{ color: "white" }} align="center"></TableCell>
+              <TableCell style={{ color: "white" }} align="center"></TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {data.map(row => (
+              <TableRow key={row.PromId}>
+                <TableCell padding="none" align="center">
+                  {row.PromId}
+                </TableCell>
+                <TableCell padding="none" align="center">
+                  {row.Rmk}
+                </TableCell>
+                <TableCell padding="none" align="center">
+                  {row.Dsc}
+                </TableCell>
+                <TableCell padding="none" align="center">
+                  {row.DscLst}
+                </TableCell>
+                <TableCell padding="none" align="center">
+                  {row.OfferDsc}
+                </TableCell>
+                <TableCell padding="none" align="center">
+                  {row.OfferDscLst}
+                </TableCell>
+                <TableCell padding="none" align="center">
+                  {row.StrtDate.slice(0, 10)}
+                </TableCell>
+                <TableCell padding="none" align="center">
+                  {row.EndDate.slice(0, 10)}
+                </TableCell>
+                <TableCell padding="none" align="center">
+                  <img src={row.ImgURL} style={{ width: 100, height: 100 }} />
+                </TableCell>
+                <TableCell padding="default" align="center">
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={e => {
+                      e.preventDefault();
+                      Search("Y");
+                    }}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? <CircularProgress color="red" /> : "Resend"}
+                  </Button>
+                </TableCell>
+                <TableCell padding="default" align="center">
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    className={classes.submit}
+                    onClick={e => {
+                      e.preventDefault();
+                      Search("Y");
+                    }}
+                    disabled={isLoading}
+                  >
+                    {isLoading ? <CircularProgress color="red" /> : "Close"}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      ) : null}
     </Container>
   );
 }
