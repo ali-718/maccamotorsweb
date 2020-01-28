@@ -72,9 +72,9 @@ function Home(props) {
   const [dropDownList, setDropDownList] = useState([]);
 
   const [textMessage, setTextMessage] = useState(85);
-  const [fullMessage, setFullMessage] = useState(100);
+  const [fullMessage, setFullMessage] = useState(300);
   const [lastLine, setLastLine] = useState(50);
-  const [fullLine, setFullLine] = useState(50);
+  const [fullLine, setFullLine] = useState(200);
 
   const ClearData = () => {
     setaxiosSuccess(false);
@@ -264,6 +264,7 @@ function Home(props) {
                 setNotificationTextMessage(e.target.value);
               }
             }}
+            multiline
           />
           <FormHelperText>
             {textMessage - 1 == -1 ? 0 : textMessage - 1} characters
@@ -306,6 +307,9 @@ function Home(props) {
           </FormHelperText>
 
           <TextField
+            rows={4}
+            rowsMax={4}
+            multiline
             variant="outlined"
             margin="normal"
             required
@@ -331,7 +335,7 @@ function Home(props) {
               }
             }}
             onChange={e => {
-              if (e.target.value.length == 100) {
+              if (e.target.value.length == 300) {
                 console.log("hello");
               } else {
                 setFullTextMessage(e.target.value);
@@ -343,6 +347,9 @@ function Home(props) {
           </FormHelperText>
 
           <TextField
+            rows={4}
+            rowsMax={4}
+            multiline
             variant="outlined"
             margin="normal"
             required
@@ -368,7 +375,7 @@ function Home(props) {
               }
             }}
             onChange={e => {
-              if (e.target.value.length == 100) {
+              if (e.target.value.length == 200) {
                 console.log("hello");
               } else {
                 setFullLastLine(e.target.value);

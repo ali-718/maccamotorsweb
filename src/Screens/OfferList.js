@@ -168,6 +168,7 @@ function Offers(props) {
       })
       .catch(e => {
         setModalErrorOpen(true);
+        setIsLoading(false);
       });
   };
 
