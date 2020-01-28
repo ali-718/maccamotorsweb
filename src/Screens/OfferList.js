@@ -70,11 +70,15 @@ function Offers(props) {
   const [isLoading, setIsLoading] = useState(false);
   const [emptyError, setEmptyError] = useState(false);
   const [axiosError, setAxiosError] = useState(false);
+  const [resendError, setResendError] = useState(false);
   const [data, setData] = useState([]);
   const [open, setOpen] = React.useState(false);
+  const [modalSuccessOpen, setModalSuccessOpen] = React.useState(false);
+  const [modalErrorOpen, setModalErrorOpen] = React.useState(false);
   const [currentOffer, setCurrentOffer] = React.useState({});
 
   const Search = validOffer => {
+    setIsLoading(true);
     if (validOffer == "Y") {
       setEmptyError(false);
       axios
@@ -87,13 +91,16 @@ function Offers(props) {
         )
         .then(res => {
           setData(res.data);
+          setIsLoading(false);
         })
         .catch(e => {
           setAxiosError(true);
+          setIsLoading(false);
         });
     } else {
       if (startDate == "" || endDate == "") {
         setEmptyError(true);
+        setIsLoading(false);
       } else {
         setEmptyError(false);
         axios
@@ -106,9 +113,11 @@ function Offers(props) {
           )
           .then(res => {
             setData(res.data);
+            setIsLoading(false);
           })
           .catch(e => {
             setAxiosError(true);
+            setIsLoading(false);
           });
       }
     }
@@ -126,6 +135,40 @@ function Offers(props) {
 
   const handleClose = () => {
     setOpen(false);
+    setOpen(false);
+    setIsLoading(false);
+    setModalSuccessOpen(false);
+  };
+
+  const Resend = promId => {
+    setResendError(false);
+    setIsLoading(true);
+    axios
+      .post(`${url}/OfferResend?PromId=${promId}`)
+      .then(res => {
+        setOpen(false);
+        setIsLoading(false);
+        setModalSuccessOpen(true);
+      })
+      .catch(e => {
+        setIsLoading(false);
+        setResendError(true);
+      });
+  };
+
+  const CloseOffer = promId => {
+    setResendError(false);
+    setIsLoading(true);
+    axios
+      .post(`${url}/SetOfferClosing?PromId=${promId}`)
+      .then(res => {
+        setOpen(false);
+        setIsLoading(false);
+        setModalSuccessOpen(true);
+      })
+      .catch(e => {
+        setModalErrorOpen(true);
+      });
   };
 
   return (
@@ -278,7 +321,7 @@ function Offers(props) {
                     className={classes.submit}
                     onClick={e => {
                       e.preventDefault();
-                      setOpen(true);
+                      CloseOffer(row.PromId);
                     }}
                     disabled={isLoading}
                   >
@@ -415,18 +458,11 @@ function Offers(props) {
               disabled={true}
               value={currentOffer.EndDate}
             />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="notification"
-              label="Notification ID"
-              name="Notification ID"
-              autoFocus
-              // disabled={true}
-              value={"end time"}
-            />
+            {resendError ? (
+              <h3 style={{ color: "red" }}>
+                Some error occoured please try again later
+              </h3>
+            ) : null}
             <Button
               type="submit"
               fullWidth
@@ -435,11 +471,96 @@ function Offers(props) {
               className={classes.submit}
               onClick={e => {
                 e.preventDefault();
-                setOpen(false);
+                Resend(currentOffer.PromId);
               }}
               disabled={isLoading}
             >
               {isLoading ? <CircularProgress color="red" /> : "Resend"}
+            </Button>
+          </div>
+        </Fade>
+      </Modal>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={modalSuccessOpen}
+        onClose={handleClose}
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500
+        }}
+        style={{ alignItems: "center", justifyContent: "center" }}
+      >
+        <Fade in={modalSuccessOpen}>
+          <div
+            style={{
+              backgroundColor: "white",
+              alignSelf: "center",
+              padding: 20
+            }}
+            className={classes.paper}
+          >
+            <h3 style={{ color: "green" }}>Success</h3>
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={e => {
+                e.preventDefault();
+                setModalSuccessOpen(false);
+              }}
+            >
+              Ok
+            </Button>
+          </div>
+        </Fade>
+      </Modal>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={modalErrorOpen}
+        onClose={() => this.setModalErrorOpen(false)}
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500
+        }}
+        style={{ alignItems: "center", justifyContent: "center" }}
+      >
+        <Fade
+          style={{
+            overflow: "scroll"
+          }}
+          in={modalErrorOpen}
+        >
+          <div
+            style={{
+              backgroundColor: "white",
+              alignSelf: "center",
+              padding: 20
+            }}
+            className={classes.paper}
+          >
+            <h3 style={{ color: "red" }}>Some Error Occoured</h3>
+
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              className={classes.submit}
+              onClick={e => {
+                e.preventDefault();
+                setModalErrorOpen(false);
+              }}
+            >
+              Ok
             </Button>
           </div>
         </Fade>
