@@ -55,6 +55,12 @@ function SignIn(props) {
   const [Password, setPassword] = useState("");
 
   useEffect(() => {
+    if (props.auth.isLogin) {
+      props.history.push("/home");
+    }
+  });
+
+  useEffect(() => {
     if (props.auth.Loading) {
       setOpen(true);
     }

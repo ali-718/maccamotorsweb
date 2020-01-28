@@ -46,9 +46,7 @@ export default class App extends Component {
               <Route exact path="/" component={SplashScreen} />
             ) : !this.state.isLogin ? (
               <Route exact path="/" component={SignIn} />
-            ) : (
-              <Route exact path="/" component={Dashboard} />
-            )}
+            ) : null}
             <Route exact path="/home" component={Dashboard} />
             <Route exact path="/forgot" component={ForgotPassword} />
             <Route exact path="/test" component={DatePickerPage} />
