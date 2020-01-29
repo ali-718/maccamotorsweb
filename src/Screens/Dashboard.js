@@ -172,7 +172,7 @@ function Dashboard(props) {
           </IconButton>
         </div>
         <center>
-          <p style={{ color: portal == "Live Portal" ? "green" : "red" }}>
+          <p style={{ color: portal == "Live Envoirment" ? "green" : "red" }}>
             {portal}
           </p>
         </center>
