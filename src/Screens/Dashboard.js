@@ -22,6 +22,7 @@ import { mainListItems, SecondaryListItems } from "./listItems";
 import Home from "./Home";
 import { connect } from "react-redux";
 import { Logout } from "../Actions/AuthActions";
+import { portal } from "../config";
 
 function Copyright() {
   return (
@@ -170,6 +171,11 @@ function Dashboard(props) {
             <ChevronLeftIcon />
           </IconButton>
         </div>
+        <center>
+          <p style={{ color: portal == "Live Portal" ? "green" : "red" }}>
+            {portal}
+          </p>
+        </center>
         <center>
           <p>
             Hello{" "}
